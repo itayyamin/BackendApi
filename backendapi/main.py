@@ -5,6 +5,12 @@ import os
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
+from .routes import items
+from .database import engine, Base
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -14,6 +20,9 @@ app = FastAPI(
     description="A Python Backend API Service",
     version="0.1.0",
 )
+
+# Include routers
+app.include_router(items.router)
 
 @app.get("/")
 async def root():
